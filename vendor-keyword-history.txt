@@ -1,0 +1,68 @@
+/*
+http://www.w3.org/TR/CSS21/syndata.html#vendor-keyword-history
+
+-ms-, mso-	Microsoft
+-moz-	Mozilla
+-o-, -xv-	Opera Software
+-atsc-	Advanced Television Standards Committee
+-wap-	The WAP Forum
+-khtml-	KDE
+-webkit-	Apple
+prince-	YesLogic
+-ah-	Antenna House
+-hp-	Hewlett Packard
+-ro-	Real Objects
+-rim-	Research In Motion
+-tc-	TallComponents
+
+
+'-' + vendor specific identifier + '-' + meaningful name
+'_' + vendor specific identifier + '-' + meaningful name
+
+-webkit-super-foo: ;
+-moz-super-foo: ;
+-ms-super-foo: ;
+-o-super-foo: ;
+super-foo: ;
+
+textarea {
+    -webkit-box-sizing: border-box; / * Safari/Chrome, other WebKit *
+    -moz-box-sizing: border-box;    / * Firefox, other Gecko *
+    box-sizing: border-box;         / * Opera/IE 8+ *
+}
+
+*/
+
+function getStyleName(PropName){
+
+
+ var e=document.documentElement,
+ camelize=function(s){return s.replace(/-(\w)/g,function(m,c){return c.toUpperCase();});},
+ camelized=camelize(PropName);
+
+ p = camelized in e.style ? camelized : getVendorStyle(camelized,e);
+
+}
+
+
+   var styleHash = {};
+   var vendorPrefixes = [ 'O', 'ms', 'Moz', 'Webkit' ];
+
+   function getVendorStyle(style, elem){
+      var s = camelize('-' + style);
+      var i = vendorPrefixes.length;
+      while (i--)
+      {
+         style = vendorPrefixes[i] + s;
+         if (elem.style[style] !== undefined)
+         {
+            return style;
+         }
+      }
+      return '';
+   };
+
+
+/*
+Object.keys(getComputedStyle(document.body)).filter(function(key) {return /^webkit/i.test(key)})
+*/
